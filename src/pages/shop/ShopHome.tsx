@@ -65,9 +65,14 @@ export default function ShopHome() {
         ) : (
           <div className="shop-grid" style={{ marginTop: 18 }}>
             {products.map((p) => {
+              const isInactive = p.is_active === false
               const out = p.show_stock && p.stock_qty <= 0
               return (
-                <div key={p.id} className="prod-card" style={{ height: '100%' }}>
+                <div
+                  key={p.id}
+                  className={`prod-card ${isInactive ? 'is-inactive' : ''}`}
+                  style={{ height: '100%' }}
+                >
                   <Link to={`/shop/product/${p.id}`} aria-label={p.name}>
                     <ProductImage product={p} className="prod-img" />
                   </Link>
@@ -81,12 +86,22 @@ export default function ShopHome() {
                       {stockBadge(p)}
                     </div>
                     <div className="card-actions">
-                      <button
-                        className="btn btn-sm btn-primary"
-                        onClick={() => addToCart(p)}
-                      >
-                        {out ? 'Ask to make it' : 'Add to basket'}
-                      </button>
+                      {isInactive ? (
+                        <button
+                          className="btn btn-sm"
+                          disabled
+                          style={{ opacity: 0.65, cursor: 'not-allowed' }}
+                        >
+                          Out of stock
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-sm btn-primary"
+                          onClick={() => addToCart(p)}
+                        >
+                          {out ? 'Ask to make it' : 'Add to basket'}
+                        </button>
+                      )}
                       <Link to={`/shop/product/${p.id}`} className="btn btn-sm">Details</Link>
                     </div>
                   </div>
@@ -101,6 +116,14 @@ export default function ShopHome() {
 }
 
 function stockBadge(p: Product) {
+  if (p.is_active === false) {
+    return (
+      <span className="badge" style={{ color: 'var(--brick)', borderColor: '#eccbc6', background: '#fdf2f0' }}>
+        <span className="badge-dot" style={{ background: 'var(--brick)' }} />
+        Out of stock
+      </span>
+    )
+  }
   if (!p.show_stock) return null
   if (p.stock_qty <= 0) return <span className="badge">Made to order</span>
   if (p.stock_qty <= 3) return <span className="badge"><span className="badge-dot" style={{ background: 'var(--ochre)' }} />{p.stock_qty} left</span>

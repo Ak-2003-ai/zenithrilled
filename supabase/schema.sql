@@ -14,8 +14,9 @@ create table if not exists products (
   created_at timestamptz not null default now()
 );
 
--- Ensure category column exists if table was already created
+-- Ensure category and is_active columns exist if table was already created
 alter table products add column if not exists category text not null default '';
+alter table products add column if not exists is_active boolean not null default true;
 
 create table if not exists categories (
   id uuid primary key default gen_random_uuid(),

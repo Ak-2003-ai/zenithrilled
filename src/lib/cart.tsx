@@ -31,6 +31,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const add = useCallback((p: Product, qty = 1) => {
     setLines((prev) => {
+      if (p.is_active === false) return prev
       const cap = capFor(p)
       const existing = prev.find((l) => l.product.id === p.id)
       if (existing) {

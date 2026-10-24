@@ -37,17 +37,19 @@ export default function ShopProduct() {
     )
   }
 
+  const isInactive = product.is_active === false
   const out = product.show_stock && product.stock_qty <= 0
   const cap = product.show_stock ? Math.max(1, product.stock_qty) : Infinity
   const clamped = Math.min(qty, cap)
 
   const addIt = () => {
+    if (isInactive) return
     cart.add(product, clamped)
     cart.setOpen(true)
   }
 
   return (
-    <article className="pdp">
+    <article className="pdp" style={isInactive ? { opacity: 0.78 } : undefined}>
       <ProductImage product={product} className={`pdp-img ${product.image_url ? '' : 'fallback'}`} />
       <div>
         <p className="muted small">
@@ -57,22 +59,31 @@ export default function ShopProduct() {
         <h1>{product.name}</h1>
         <div className="pdp-price">{fmtMoney(product.price)}</div>
 
-        {product.show_stock && (
-          <div style={{ marginBottom: 14 }}>
-            {out ? (
+        <div style={{ marginBottom: 14 }}>
+          {isInactive ? (
+            <span className="badge" style={{ color: 'var(--brick)', borderColor: '#eccbc6', background: '#fdf2f0' }}>
+              <span className="badge-dot" style={{ background: 'var(--brick)' }} />
+              Out of stock
+            </span>
+          ) : product.show_stock ? (
+            out ? (
               <span className="badge"><span className="badge-dot" style={{ background: 'var(--ochre)' }} />Made to order — let's talk</span>
             ) : product.stock_qty <= 3 ? (
               <span className="badge"><span className="badge-dot" style={{ background: 'var(--ochre)' }} />{product.stock_qty} left on the shelf</span>
             ) : (
               <span className="badge"><span className="badge-dot" style={{ background: 'var(--moss)' }} />In stock</span>
-            )}
-          </div>
-        )}
+            )
+          ) : null}
+        </div>
 
         <p className="pdp-desc">{product.description || 'No description yet — this one is worth asking about.'}</p>
 
         <div className="pdp-actions">
-          {out ? (
+          {isInactive ? (
+            <button className="btn" disabled style={{ opacity: 0.65, cursor: 'not-allowed' }}>
+              Out of stock
+            </button>
+          ) : out ? (
             <button className="btn btn-primary" onClick={() => { cart.add(product, 1); cart.setOpen(true) }}>
               Ask to make it
             </button>
@@ -94,11 +105,15 @@ export default function ShopProduct() {
           )}
         </div>
 
-        {out && (
+        {isInactive ? (
+          <p className="muted small" style={{ marginTop: 14, maxWidth: '44ch' }}>
+            This piece is currently out of stock. Check back later or contact us to see when it's back.
+          </p>
+        ) : out ? (
           <p className="muted small" style={{ marginTop: 14, maxWidth: '44ch' }}>
             This one is made when you ask for it. Add it to the basket and we'll confirm lead time with you.
           </p>
-        )}
+        ) : null}
       </div>
     </article>
   )

@@ -9,6 +9,7 @@ type FormState = {
   description: string
   price: string
   image_url: string
+  is_active: boolean
   show_stock: boolean
   stock_qty: number
 }
@@ -19,6 +20,7 @@ const BLANK: FormState = {
   description: '',
   price: '',
   image_url: '',
+  is_active: true,
   show_stock: false,
   stock_qty: 0,
 }
@@ -53,6 +55,7 @@ export default function ProductForm() {
           description: p?.description ?? '',
           price: p ? String(p.price) : '',
           image_url: p?.image_url ?? '',
+          is_active: p?.is_active ?? true,
           show_stock: p?.show_stock ?? false,
           stock_qty: p?.stock_qty ?? 0,
         })
@@ -133,6 +136,7 @@ export default function ProductForm() {
       description: form.description.trim(),
       price,
       image_url: form.image_url.trim(),
+      is_active: form.is_active,
       show_stock: form.show_stock,
       stock_qty: form.show_stock ? Math.max(0, Math.round(form.stock_qty || 0)) : 0,
     }
@@ -347,6 +351,22 @@ export default function ProductForm() {
                 Remove photo
               </button>
             )}
+          </div>
+        </div>
+
+        <div className="field" style={{ paddingBottom: 6 }}>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={form.is_active}
+              onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
+            />
+            <span className="switch-text">
+              Show in store (Active)
+            </span>
+          </label>
+          <div className="muted small" style={{ marginTop: 4 }}>
+            When turned off, this product will appear translucent and marked as out of stock in the shop.
           </div>
         </div>
 

@@ -5,6 +5,7 @@ export type Product = {
   price: number
   image_url: string
   category?: string
+  is_active?: boolean
   show_stock: boolean
   stock_qty: number
   created_at: string
