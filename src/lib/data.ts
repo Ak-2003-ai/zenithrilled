@@ -99,6 +99,9 @@ export function saveProduct(input: ProductInput, id?: string): Promise<void> {
         if (error.message?.includes('violates row-level security policy')) {
           throw new Error('Supabase blocked write (Row-Level Security). Run the SQL fix in your Supabase SQL Editor.')
         }
+        if (error.message?.includes('is_active')) {
+          throw new Error("Missing 'is_active' column in Supabase. Run: ALTER TABLE products ADD COLUMN IF NOT EXISTS is_active boolean NOT NULL DEFAULT true;")
+        }
         throw error
       }
     })()
