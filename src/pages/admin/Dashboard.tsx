@@ -159,7 +159,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="head-row" style={{ alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: 20 }}>
+      <div className="head-row" style={{ alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: 18 }}>
         <div>
           <h1 className="page-title">The shelf</h1>
         </div>
@@ -169,8 +169,8 @@ export default function Dashboard() {
           style={{
             marginLeft: 'auto',
             textDecoration: 'none',
-            fontSize: '15px',
-            padding: '11px 22px',
+            fontSize: '14.5px',
+            padding: '10px 18px',
             fontWeight: 700,
             borderRadius: '9px',
             whiteSpace: 'nowrap',
@@ -212,7 +212,7 @@ export default function Dashboard() {
               <input
                 type="text"
                 className="input"
-                placeholder="Search products by name, description, category…"
+                placeholder="Search products by name, category…"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -269,11 +269,10 @@ export default function Dashboard() {
 
             {/* Sort Options */}
             <select
-              className="toolbar-select"
+              className="toolbar-select toolbar-sort-select"
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
               aria-label="Sort products"
-              style={{ marginLeft: 'auto' }}
             >
               <option value="newest">Sort: Newest first</option>
               <option value="oldest">Sort: Oldest first</option>
@@ -384,51 +383,53 @@ export default function Dashboard() {
                   </div>
 
                   <div className="card-actions">
-                    {/* Show in Store Toggle */}
-                    <label
-                      className="switch"
-                      title={isActive ? 'Product is live in store. Turn off to mark out of stock.' : 'Product is hidden. Turn on to make active.'}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={isActive}
-                        disabled={pending === p.id}
-                        onChange={(e) => updateActive(p, e.target.checked)}
-                      />
-                      <span className="switch-text small">
-                        {isActive ? 'In store' : 'Out of stock'}
-                      </span>
-                    </label>
-
-                    {/* Show stock to customer toggle */}
-                    <label
-                      className="switch"
-                      title="When on, shows exact stock count to customers in the store"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={p.show_stock}
-                        disabled={pending === p.id}
-                        onChange={(e) => updateShowStock(p, e.target.checked)}
-                      />
-                      <span className="switch-text small">Show stock</span>
-                    </label>
-
-                    {p.show_stock && (
-                      <span
-                        className="stepper"
-                        title="Stock ready on shelf"
-                        style={{ opacity: pending === p.id ? 0.5 : 1 }}
+                    <div className="card-actions-switches">
+                      {/* Show in Store Toggle */}
+                      <label
+                        className="switch"
+                        title={isActive ? 'Product is live in store. Turn off to mark out of stock.' : 'Product is hidden. Turn on to make active.'}
                       >
-                        <button onClick={() => updateStock(p, -1)} aria-label={`Remove one of ${p.name}`}>–</button>
-                        <span className="qty" style={{ minWidth: 26, textAlign: 'center', fontWeight: 700, fontSize: 13 }}>
-                          {p.stock_qty}
+                        <input
+                          type="checkbox"
+                          checked={isActive}
+                          disabled={pending === p.id}
+                          onChange={(e) => updateActive(p, e.target.checked)}
+                        />
+                        <span className="switch-text small">
+                          {isActive ? 'In store' : 'Out of stock'}
                         </span>
-                        <button onClick={() => updateStock(p, +1)} aria-label={`Add one of ${p.name}`}>+</button>
-                      </span>
-                    )}
+                      </label>
 
-                    <div style={{ display: 'flex', gap: 6, marginLeft: 'auto', alignItems: 'center' }}>
+                      {/* Show stock to customer toggle */}
+                      <label
+                        className="switch"
+                        title="When on, shows exact stock count to customers in the store"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={p.show_stock}
+                          disabled={pending === p.id}
+                          onChange={(e) => updateShowStock(p, e.target.checked)}
+                        />
+                        <span className="switch-text small">Show stock</span>
+                      </label>
+
+                      {p.show_stock && (
+                        <span
+                          className="stepper"
+                          title="Stock ready on shelf"
+                          style={{ opacity: pending === p.id ? 0.5 : 1 }}
+                        >
+                          <button onClick={() => updateStock(p, -1)} aria-label={`Remove one of ${p.name}`}>–</button>
+                          <span className="qty" style={{ minWidth: 26, textAlign: 'center', fontWeight: 700, fontSize: 13 }}>
+                            {p.stock_qty}
+                          </span>
+                          <button onClick={() => updateStock(p, +1)} aria-label={`Add one of ${p.name}`}>+</button>
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="card-actions-btns">
                       <Link to={`/admin/products/${p.id}/edit`} className="btn btn-sm">Edit</Link>
                       {confirming === p.id ? (
                         <>

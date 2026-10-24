@@ -40,7 +40,7 @@ export default function Analytics() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 16 }}>
+      <div className="analytics-charts-grid section-gap">
         <div className="panel chart-card">
           <div className="chart-title">Orders, last 14 days</div>
           <div className="chart-sub">Bars are orders; the number above each bar is the count.</div>

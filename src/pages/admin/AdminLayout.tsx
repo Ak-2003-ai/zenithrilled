@@ -58,11 +58,19 @@ function AdminShell({
   return (
     <div className="admin-shell">
       <aside className="admin-side">
-        <div className="side-brand">
-          <span className="wordmark">
-            <img src="/logo.png" alt="Zenithrilled logo" width="36" height="36" style={{ borderRadius: '50%', objectFit: 'cover' }} />
-            Zenithrilled
-          </span>
+        <div className="side-brand-row">
+          <div className="side-brand">
+            <span className="wordmark">
+              <img src="/logo.png" alt="Zenithrilled logo" width="34" height="34" style={{ borderRadius: '50%', objectFit: 'cover' }} />
+              Zenithrilled
+            </span>
+          </div>
+
+          <div className="mobile-admin-actions">
+            <button className="btn btn-sm btn-signout" onClick={onSignOut}>
+              Sign out
+            </button>
+          </div>
         </div>
 
         <nav className="side-nav">
@@ -72,11 +80,11 @@ function AdminShell({
             </NavLink>
           ))}
           <NavLink to="/shop" className={({ isActive }) => (isActive ? 'active' : '')}>
-            View shop
+            View shop ↗
           </NavLink>
         </nav>
 
-        <div className="side-foot">
+        <div className="side-foot desktop-only">
           <span className="side-user" title={displayName ?? undefined}>
             {displayName}
           </span>
